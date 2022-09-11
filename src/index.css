@@ -32,7 +32,5 @@
 @import url(../src/components/Register/Register.css);
 
 @import url(../src/components/SavedMovies/SavedMovies.css);
-@import url(../src/components/SavedMovies/MoviesCard/MoviesCard.css);
-@import url(../src/components/SavedMovies/MoviesCardList/MoviesCardList.css);
 
 @import url(../src/components/PageNotFound/PageNotFound.css);
