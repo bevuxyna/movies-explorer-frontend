@@ -34,6 +34,11 @@
     min-height: 34px;
     width: 100%;
     max-width: 280px;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 34px;
+    text-align: center;
+    color: #A0A0A0;
 }
 
 .search-form__container_input:focus {
@@ -104,6 +109,12 @@
 
     .search-form__container_icon {
         display: none;
+    }
+
+    .search-form__container_input {
+        font-size: 18px;
+        line-height: 22px;
+        text-align: left;
     }
 
     .search-form__container_input::placeholder {
