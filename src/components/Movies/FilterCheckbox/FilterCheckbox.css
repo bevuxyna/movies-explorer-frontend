@@ -1,0 +1,26 @@
+.filter-checkbox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.filter-checkbox__button {
+    border-radius: 20px;
+    border: none;
+    width: 36px;
+    height: 20px;
+    background-image: url(../../../images/tumbler-off.svg);
+    background-repeat: no-repeat;
+    background-position: left;
+    cursor: pointer;
+}
+
+.filter-checkbox__title {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 12px;
+}
