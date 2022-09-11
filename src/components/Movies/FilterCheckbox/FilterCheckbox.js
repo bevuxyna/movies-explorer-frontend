@@ -2,11 +2,13 @@ import React from 'react';
 
 function FilterCheckbox () {
     return (
-        <div className="filter-checkbox">
-            <button className="filter-checkbox__button" type=""/>
-            <p className="filter-checkbox__title">Короткометражки</p>
-
-        </div>
+            <label className="filter-checkbox">
+                <div className="filter-checkbox__container">
+                    <input className="filter-checkbox__input" type="checkbox"/>
+                    <span className="filter-checkbox__tumbler" />
+                </div>
+                <p className="filter-checkbox__text">Короткометражки</p>
+            </label>
     )
 }
 
