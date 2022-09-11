@@ -5,7 +5,7 @@ import logo from '../../images/logo.svg';
 function Login() {
     return (
         <section className="login">
-            <img src={logo} alt="Логотип" className="logo" />
+            <Link to='/'><img src={logo} alt="Логотип" className="logo" /></Link>
             <h2 className="login__title">Рады видеть!</h2>
             <form className="login__form">
                 <label className="login__form-label">E-mail</label>
