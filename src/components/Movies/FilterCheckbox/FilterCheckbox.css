@@ -24,3 +24,14 @@
     margin-bottom: 0;
     margin-left: 12px;
 }
+
+@media screen and (max-width: 320px) {
+    .filter-checkbox {
+        margin-top: 43px;
+    }
+
+    .filter-checkbox__title {
+        font-size: 11px;
+    }
+
+}
