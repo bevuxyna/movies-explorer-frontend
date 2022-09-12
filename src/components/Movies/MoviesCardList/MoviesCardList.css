@@ -4,6 +4,15 @@
     margin-top: 70px;
 }
 
+.movies-card-list__not-found {
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: center;
+    display: none;
+    margin: 0;
+}
+
 .movies-card-list__container {
     max-width: 1140px;
     display: grid;
