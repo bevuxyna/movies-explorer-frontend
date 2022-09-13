@@ -3,9 +3,11 @@
     flex-direction: column;
     align-items: center;
     background-color: #F5F5F5;
-    width: 100%;
-    max-width: 1200px;
+    width: 93.75%;
+    max-width: 1140px;
     border-radius: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .promo__title {
@@ -21,7 +23,10 @@
 @media screen and (max-width: 768px) {
     .promo {
         max-width: 728px;
+        margin-left: 20px;
+        margin-right: 20px;
     }
+
     .promo__title {
         font-size: 40px;
         line-height: 52px;
@@ -33,7 +38,10 @@
 @media screen and (max-width: 320px) {
     .promo {
         max-width: 292px;
+        margin-left: 14px;
+        margin-right: 14px;
     }
+
     .promo__title {
         font-size: 29px;
         line-height: 37px;
