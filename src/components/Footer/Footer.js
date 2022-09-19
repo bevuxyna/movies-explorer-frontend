@@ -2,7 +2,7 @@ import React from 'react';
 
 function Footer() {
     return (
-        <section className="footer">
+        <footer className="footer">
             <h2 className="footer__title">Учебный проект Яндекс.Практикум х BeatFilm.</h2>
             <div className="footer__info">
                 <p className="footer__copyright">&copy;&nbsp;{new Date().getFullYear()}</p>
@@ -11,7 +11,7 @@ function Footer() {
                     <a href="https://github.com/bevuxyna" target="_blank" className="footer__link">Github</a>
                 </div>
             </div>
-        </section>
+        </footer>
     )
 }
 
