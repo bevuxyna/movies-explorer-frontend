@@ -10,6 +10,8 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
 import PageNotFound from "../PageNotFound/PageNotFound";
 
+import moviesApi from "../../utils/MoviesApi";
+
 function App() {
 
     const headerEndpoints = ["/movies", "/saved-movies", "/profile", "/"];
