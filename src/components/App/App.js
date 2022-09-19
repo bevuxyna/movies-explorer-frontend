@@ -11,6 +11,7 @@ import Profile from "../Profile/Profile";
 import PageNotFound from "../PageNotFound/PageNotFound";
 
 import moviesApi from "../../utils/MoviesApi";
+import mainApi from "../../utils/MainApi";
 
 function App() {
 
