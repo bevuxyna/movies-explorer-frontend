@@ -12,6 +12,7 @@ import PageNotFound from "../PageNotFound/PageNotFound";
 
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
+import * as auth from '../../utils/auth.js';
 
 function App() {
 
