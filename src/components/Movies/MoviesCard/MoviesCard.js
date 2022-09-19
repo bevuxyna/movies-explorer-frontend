@@ -4,7 +4,7 @@ import movieCard from '../../../images/movie.png';
 
 function MoviesCard() {
     return (
-            <div className="movies-card">
+            <li className="movies-card">
                 <img className="movies-card__image" src={movieCard} alt="Постер фильма" />
 
                 <div className="movies-card__info">
@@ -25,7 +25,7 @@ function MoviesCard() {
                         <button className="movies-card__button-delete" type="button" />
                     </Route>
                 </div>
-            </div>
+            </li>
     );
 }
 
