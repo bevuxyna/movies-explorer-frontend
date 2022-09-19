@@ -1,0 +1,62 @@
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.navigation__movies {
+
+}
+
+.navigation__movies-link {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 18px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.navigation__saved-movies-link {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #000000;
+    text-decoration: none;
+    margin-left: 16px;
+}
+
+.navigation__account {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.navigation__account-link {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #000000;
+    text-decoration: none;
+
+}
+
+.navigation__account-icon {
+    background-image: url('../../images/account_icon.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #F9F9F9;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+    padding: 0;
+}
+
+.navigation__account-icon:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
