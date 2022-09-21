@@ -1,13 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 import logo from '../../images/logo.svg';
 
-function Register() {
+function Register({onRegister}) {
+    const [userData, setUserData] = useState({
+        name: '',
+        email: '',
+        password: '',
+    });
+
+    const handleChange = (evt) => {
+        const {name, value} = evt.target;
+        setUserData({
+            ...userData, [name]: value
+        });
+    }
+
+    const handleSubmit = (evt) => {
+        evt.preventDefault();
+        onRegister(userData);
+    }
+
     return (
         <section className="register">
             <Link to='/'><img src={logo} alt="Логотип" className="logo" /></Link>
             <h2 className="register__title">Добро пожаловать!</h2>
-            <form className="register__form">
+            <form className="register__form" onSubmit={handleSubmit}>
                 <label className="register__form-label">Имя</label>
                 <input
                     className="register__form-input"
@@ -15,6 +33,8 @@ function Register() {
                     type="text"
                     id="name"
                     required
+                    value={userData.name}
+                    onChange={handleChange}
                 />
 
                 <label className="register__form-label">E-mail</label>
@@ -24,6 +44,8 @@ function Register() {
                     type="email"
                     id="email"
                     required
+                    value={userData.email}
+                    onChange={handleChange}
                 />
 
                 <label className="register__form-label">Пароль</label>
@@ -33,6 +55,8 @@ function Register() {
                     type="password"
                     id="password"
                     required
+                    value={userData.password}
+                    onChange={handleChange}
                 />
 
                 <button
