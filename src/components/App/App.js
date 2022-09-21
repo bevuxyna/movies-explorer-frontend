@@ -10,6 +10,7 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
@@ -110,8 +111,6 @@ function App() {
             .then((res) => {
                 //обновляем стейт currentUser из полученных данных
                 setCurrentUser(res);
-
-                // closeAllPopups();
             })
             .catch((err) => {
                 console.log(`Ошибка ${err}`);
@@ -142,17 +141,20 @@ function App() {
                         <Login onLogin={handleLogin} />
                     </Route>
 
-                    <Route exact path="/profile">
-                        <Profile />
-                    </Route>
+                    <ProtectedRoute
+                        exact path="/profile"
+                        component={Profile}
+                    />
 
-                    <Route exact path="/movies">
-                        <Movies />
-                    </Route>
+                    <ProtectedRoute
+                        exact path="/movies"
+                        component={Movies}
+                    />
 
-                    <Route exact path="/saved-movies">
-                        <SavedMovies />
-                    </Route>
+                    <ProtectedRoute
+                        exact path="/saved-movies"
+                        component={SavedMovies}
+                    />
 
                     <Route path="*">
                         <PageNotFound />
