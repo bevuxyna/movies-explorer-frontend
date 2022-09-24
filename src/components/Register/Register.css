@@ -90,6 +90,7 @@
 .register__form-button-submit_disabled {
     color: #C2C2C2;
     background-color: #F8F8F8;
+    cursor: default;
 }
 
 .register__form-signin-block {

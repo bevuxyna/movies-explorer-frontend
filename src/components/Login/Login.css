@@ -89,6 +89,7 @@
 .login__form-button-submit_disabled {
     color: #C2C2C2;
     background-color: #F8F8F8;
+    cursor: default;
 }
 
 .login__form-signup-block {
