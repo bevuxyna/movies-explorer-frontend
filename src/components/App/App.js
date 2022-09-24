@@ -12,7 +12,6 @@ import PageNotFound from "../PageNotFound/PageNotFound";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
-import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 import * as auth from '../../utils/auth.js';
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
@@ -23,7 +22,11 @@ function App() {
     const headerEndpoints = ["/movies", "/saved-movies", "/profile", "/"];
     const footerEndpoints = ["/movies", "/saved-movies", "/"];
 
-    const [currentUser, setCurrentUser] = useState({});
+    const [currentUser, setCurrentUser] = useState({
+        name: "",
+        email: "",
+        _id: ""
+    });
     const [loggedIn, setLoggedIn] = useState(false);
     const [infoTooltipOpen, setInfoTooltipOpen] = useState(false);
     const [infoTooltipImage, setInfoTooltipImage] = useState(imageSuccess);
@@ -119,14 +122,28 @@ function App() {
         setLoggedIn(false);
     }
 
-    function handleUpdateUser(data) {
-        mainApi.updateUserInfo(data)
+    function handleUpdateUser({name, email}) {
+        setIsLoading(true);
+        mainApi.updateUserInfo({name, email})
             .then((res) => {
                 //обновляем стейт currentUser из полученных данных
-                setCurrentUser(res);
+                setCurrentUser({
+                    name: res.name,
+                    email: res.email
+                });
+
+                //Попап успешного редактирования
+                setInfoTooltipImage(imageSuccess);
+                setMessage('Вы успешно изменили данные!');
+                setInfoTooltipOpen(true);
             })
             .catch((err) => {
                 console.log(`Ошибка ${err}`);
+
+                //Попап ошибки редактирования
+                setInfoTooltipImage(imageError);
+                setMessage('Что-то пошло не так! Попробуйте ещё раз.');
+                setInfoTooltipOpen(true);
             })
     }
 
@@ -160,6 +177,10 @@ function App() {
                     <ProtectedRoute
                         exact path="/profile"
                         component={Profile}
+                        onUpdateUser={handleUpdateUser}
+                        isLoading={isLoading}
+                        onSignout={handleSignOut}
+                        loggedIn={loggedIn}
                     />
 
                     <ProtectedRoute
