@@ -26,6 +26,11 @@
     line-height: 12px;
     color: #A0A0A0;
     margin-bottom: 10px;
+    margin-top: 6px;
+}
+
+.register__form-label:nth-of-type(1) {
+    margin-top: 0;
 }
 
 .register__form-input {
@@ -39,13 +44,26 @@
     border-radius: 8px;
     white-space: nowrap;
     overflow: hidden;
-    margin-bottom: 20px;
     padding: 15px;
     vertical-align: top;
 }
 
 .register__form-input:focus {
     outline: none;
+}
+
+.register__form-input_error {
+    color: #EE3465;
+}
+
+.register__form-error {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #EE3465;
+    margin-top: 10px;
+    max-width: 396px;
+    min-height: 24px;
 }
 
 .register__form-button-submit {
@@ -67,6 +85,11 @@
 
 .register__form-button-submit:hover {
     opacity: 0.8;
+}
+
+.register__form-button-submit_disabled {
+    color: #C2C2C2;
+    background-color: #F8F8F8;
 }
 
 .register__form-signin-block {

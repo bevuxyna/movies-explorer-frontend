@@ -28,6 +28,7 @@ function App() {
     const [infoTooltipOpen, setInfoTooltipOpen] = useState(false);
     const [infoTooltipImage, setInfoTooltipImage] = useState(imageSuccess);
     const [message, setMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const history = useHistory();
 
@@ -64,6 +65,7 @@ function App() {
     }, []);
 
     function handleRegister(registerData) {
+        setIsLoading(true);
         auth.register(registerData)
             .then(() => {
                 //Попап успешной регистрации
@@ -92,6 +94,11 @@ function App() {
                     localStorage.setItem('jwt', res.token);
                     tokenCheck();
 
+                    //Попап успешного логина
+                    setInfoTooltipImage(imageSuccess);
+                    setMessage('Вы успешно авторизованы!');
+                    setInfoTooltipOpen(true);
+
                     //Переадресация пользователя на основную страницу со всей функциональностью приложения
                     history.push('/movies');
                 }
@@ -99,11 +106,17 @@ function App() {
             .catch((err) => {
                 //Попап ошибки входа
                 setInfoTooltipImage(imageError);
-                setMessage('Что-то пошло не так! Попробуйте ещё раз.');
+                setMessage('Вы ввели неверный e-mail или пароль!');
                 setInfoTooltipOpen(true);
 
                 console.log(`Ошибка ${err}`);
             })
+    }
+
+    //Выход из системы, удаляем JWT-токен из localStorage
+    function handleSignOut() {
+        localStorage.removeItem('jwt');
+        setLoggedIn(false);
     }
 
     function handleUpdateUser(data) {
@@ -134,7 +147,10 @@ function App() {
                     </Route>
 
                     <Route exact path="/sign-up">
-                        <Register onRegister={handleRegister} />
+                        <Register
+                            onRegister={handleRegister}
+                            isLoading={isLoading}
+                        />
                     </Route>
 
                     <Route exact path="/sign-in">
