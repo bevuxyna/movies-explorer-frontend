@@ -10,6 +10,7 @@
 
 .movies-card__image {
     border-radius: 6px;
+    width: 100%;
     max-width: 360px;
     height: 201px;
 }
@@ -66,7 +67,7 @@
     border: none;
     width: 21px;
     height: 21px;
-    display: none;
+    cursor: pointer;
 }
 
 .movies-card__button-delete {
