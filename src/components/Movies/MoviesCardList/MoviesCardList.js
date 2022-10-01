@@ -13,21 +13,22 @@ function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) 
     // Если пользователь ещё ничего не искал, блока с карточками на странице нет.
     const [renderedMovies, setRenderedMovies] = useState([]);
 
-    //ширина экрана устройства
+    // Ширина экрана устройства
     const [deviceWidth, setDeviceWidth] = useState(1280);
 
     useEffect(() => {
         setMovies();
     }, [maxCards]);
 
+    // Отслеживание ширины экрана устройства
     useEffect(() => {
         checkDeviceWidth();
     }, [deviceWidth, foundMovies, location]);
 
     // Проверка ширины экрана устройства при монтировании компонента результатов
     useEffect(() => {
-        onSubscribe();
-        return () => offSubscribe();
+        onSubscribeResize();
+        return () => offSubscribeResize();
     }, []);
 
     // Количество найденных фильмов в блоке результата
@@ -42,6 +43,7 @@ function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) 
         setRenderedMovies(movies);
     }
 
+    // Количество карточек, которые отображаются на странице, зависит от ширины экрана устройства
     function checkDeviceWidth() {
         if (deviceWidth < DEVICE_WIDTH_768) {
             setFoundMovies(5);
@@ -57,11 +59,11 @@ function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) 
         }
     }
 
-    function handleSubscribe() {
+    function handleSubscribeResize() {
         setDeviceWidth(window.innerWidth);
     }
 
-    function onSubscribe() {
+    function onSubscribeResize() {
         // Пользователь может изменять ширину экрана своего устройства.
         // Например, переводя телефон из портретной ориентации в альбомную, и наоборот.
         // Это событие можно отслеживать с помощью слушателя "resize".
@@ -69,13 +71,13 @@ function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) 
         // например, при изменении ширины экрана в отладчике, устанавливаем setTimeout
         // на вызов этой функции внутри слушателя "resize".
         window.addEventListener("resize", function () {
-            setTimeout(handleSubscribe, 3000);
+            setTimeout(handleSubscribeResize, 3000);
         });
     }
 
-    function offSubscribe() {
+    function offSubscribeResize() {
         window.removeEventListener("resize", function () {
-            setTimeout(handleSubscribe, 3000);
+            setTimeout(handleSubscribeResize, 3000);
         });
     }
 
