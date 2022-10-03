@@ -180,6 +180,7 @@ function App() {
 
     // Поиск фильмов
     function handleSearchMovies(movie, checked) {
+        // Если все фильмы с сервиса beatfilm-movies уже загружены
         if (loadedMovies.length !== 0) {
             const searchMovies = loadedMovies.filter((item) =>
                 // Поиск фильмов регистронезависимый
