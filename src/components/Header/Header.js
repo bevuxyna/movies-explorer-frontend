@@ -5,7 +5,6 @@ import Navigation from '../Navigation/Navigation';
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 
 function Header({loggedIn}) {
-    const burgerMenuEndpoints = ["/movies", "/saved-movies", "/profile", "/"];
     const authEndpoints = ["/movies", "/saved-movies", "/profile"];
 
     const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
@@ -24,16 +23,24 @@ function Header({loggedIn}) {
             <Switch>
                 <Route exact path="/">
                     {loggedIn ? (
-                        <div className="header__auth-container">
-                            <Link to='/'><img src={logo} alt="Логотип" className="logo" /></Link>
-                            <div className="header__auth-navigation">
-                                <Navigation/>
+                        <div>
+                            <div className="header__auth-container">
+                                <Link to='/'><img src={logo} alt="Логотип" className="logo" /></Link>
+                                <div className="header__auth-navigation">
+                                    <Navigation/>
+                                </div>
+                                <button
+                                    className="header__burger-menu-button"
+                                    onClick={handleOpenBurgerMenu}
+                                />
                             </div>
-                            <button
-                                className="header__burger-menu-button"
-                                onClick={handleOpenBurgerMenu}
+
+                            <BurgerMenu
+                                isOpen={isBurgerMenuOpen}
+                                onCloseBurgerMenu={handleCloseBurgerMenu}
                             />
                         </div>
+
                     ) : (
                         <div className="header__container">
                             <Link to='/'><img src={logo} alt="Логотип" className="logo" /></Link>
@@ -46,25 +53,25 @@ function Header({loggedIn}) {
                 </Route>
 
                 <Route exact path={authEndpoints}>
-                    <div className="header__auth-container">
-                        <Link to='/'><img src={logo} alt="Логотип" className="logo" /></Link>
-                        <div className="header__auth-navigation">
-                            <Navigation/>
+                    <div>
+                        <div className="header__auth-container">
+                            <Link to='/'><img src={logo} alt="Логотип" className="logo" /></Link>
+                            <div className="header__auth-navigation">
+                                <Navigation/>
+                            </div>
+                            <button
+                                className="header__burger-menu-button"
+                                onClick={handleOpenBurgerMenu}
+                            />
                         </div>
-                        <button
-                            className="header__burger-menu-button"
-                            onClick={handleOpenBurgerMenu}
+
+                        <BurgerMenu
+                            isOpen={isBurgerMenuOpen}
+                            onCloseBurgerMenu={handleCloseBurgerMenu}
                         />
                     </div>
-                </Route>
 
-                <Route exact path={burgerMenuEndpoints}>
-                    <BurgerMenu
-                        isOpen={isBurgerMenuOpen}
-                        onCloseBurgerMenu={handleCloseBurgerMenu}
-                    />
                 </Route>
-
             </Switch>
         </header>
     )
