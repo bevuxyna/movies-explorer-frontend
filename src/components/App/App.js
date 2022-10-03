@@ -12,6 +12,7 @@ import PageNotFound from "../PageNotFound/PageNotFound";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
+import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 import * as auth from '../../utils/auth.js';
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
@@ -19,6 +20,8 @@ import imageError from '../../images/image_error.svg';
 import imageSuccess from '../../images/image_success.svg';
 
 function App() {
+    const history = useHistory();
+
     const headerEndpoints = ["/movies", "/saved-movies", "/profile", "/"];
     const footerEndpoints = ["/movies", "/saved-movies", "/"];
 
@@ -33,7 +36,29 @@ function App() {
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const history = useHistory();
+    const [loadedMovies, setLoadedMovies] = useState([]); // загруженные фильмы при первом поиске
+    const [foundMovies, setFoundMovies] = useState([]); // найденные фильмы
+    const [savedMovies, setSavedMovies] = useState([]); // сохраненные фильмы
+    const [savedMoviesList, setSavedMoviesList] = useState([]);
+
+    const [isPreloader, setIsPreloader] = useState(false);
+
+    useEffect(() => {
+        tokenCheck();
+    }, []);
+
+    useEffect(() => {
+        if (localStorage.getItem("searchedMovies") && localStorage.getItem("checkboxStatus")) {
+            const checkboxStatus = JSON.parse(localStorage.getItem("checkboxStatus"));
+            handleCheckboxMovies(checkboxStatus);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (loggedIn && currentUser) {
+            getSavedMovies();
+        }
+    }, [loggedIn, currentUser]);
 
     //проверка наличия у пользователя токена
     function tokenCheck() {
@@ -51,22 +76,19 @@ function App() {
                     }
                 })
                 .catch((err) => {
-                    // if (err.status === 401) {
-                    //     handleSignout();
-                    // } else {
-                    //     handleSignout();
-                    //     setIsTooltipPopupOpen(true);
-                    //     setSuccess(false);
-                    //     setPopupText(`Ошибка ${err.statusText}`);
-                    // }
+                    if (err.status === 401) {
+                        handleSignOut();
+                    } else {
+                        handleSignOut();
+                        setInfoTooltipImage(imageError);
+                        setMessage(`Ошибка ${err.statusText}`);
+                        setInfoTooltipOpen(true);
+                    }
                 });
         }
     }
 
-    useEffect(() => {
-        tokenCheck();
-    }, []);
-
+    // Регистрация пользователя
     function handleRegister(registerData) {
         setIsLoading(true);
         auth.register(registerData)
@@ -76,7 +98,7 @@ function App() {
                 setMessage('Вы успешно зарегистрировались!');
                 setInfoTooltipOpen(true);
 
-                //Переадресация пользователя на страницу входа
+                //Переадресация пользователя на страницу /movies
                 history.push('/movies');
             })
             .catch((err) => {
@@ -89,12 +111,13 @@ function App() {
             });
     }
 
+    // Авторизация пользователя
     function handleLogin(loginData) {
         auth.authorize(loginData)
             .then((res) => {
                 if (res.token) {
                     setLoggedIn(true);
-                    localStorage.setItem('jwt', res.token);
+                    localStorage.setItem("jwt", res.token);
                     tokenCheck();
 
                     //Попап успешного логина
@@ -116,12 +139,15 @@ function App() {
             })
     }
 
-    //Выход из системы, удаляем JWT-токен из localStorage
+    //Выход из системы, удаляем всё из localStorage
     function handleSignOut() {
-        localStorage.removeItem('jwt');
+        localStorage.clear();
         setLoggedIn(false);
+        setCurrentUser({ name: "", email: "", _id: "" });
+        history.push("/");
     }
 
+    // Обновление данных пользователя
     function handleUpdateUser({name, email}) {
         setIsLoading(true);
         mainApi.updateUserInfo({name, email})
@@ -147,15 +173,154 @@ function App() {
             })
     }
 
-    const closeAllPopups = () => {
+    // Закрытие попапов
+    function closeAllPopups() {
         setInfoTooltipOpen(false);
-    };
+    }
+
+    // Поиск фильмов
+    function handleSearchMovies(movie, checked) {
+        if (loadedMovies.length !== 0) {
+            const searchMovies = loadedMovies.filter((item) =>
+                // Поиск фильмов регистронезависимый
+                item.nameRU.toLowerCase().includes(movie.toLowerCase()));
+
+            if (searchMovies.length === 0) {
+                setInfoTooltipImage(imageError);
+                setMessage('По вашему запросу ничего не найдено');
+                setInfoTooltipOpen(true);
+            } else {
+                // При поиске текст запроса, найденные фильмы и состояние переключателя короткометражек
+                // сохраняются в хранилище.
+                localStorage.setItem("searchWord", movie);
+                localStorage.setItem("searchedMovies", JSON.stringify(searchMovies));
+                localStorage.setItem("checkboxStatus", JSON.stringify(checked));
+
+                setFoundMovies(searchMovies);
+            }
+        } else {
+            setIsPreloader(true);
+
+            // Запрос всех фильмов с сервиса beatfilm-movies производится только при первом поиске
+            moviesApi.getInitialMovies()
+                .then((requestMovies) => {
+                    const searchMovies = requestMovies.filter((item) =>
+                        // Поиск фильмов регистронезависимый
+                        item.nameRU.toLowerCase().includes(movie.toLowerCase()));
+
+                    if (searchMovies.length === 0) {
+                        setInfoTooltipImage(imageError);
+                        setMessage('По вашему запросу ничего не найдено');
+                        setInfoTooltipOpen(true);
+                    } else {
+                        // При поиске текст запроса, найденные фильмы и состояние переключателя короткометражек
+                        // сохраняются в хранилище.
+                        localStorage.setItem("loadedMovies", JSON.stringify(requestMovies));
+                        setLoadedMovies(requestMovies);
+                        localStorage.setItem("searchWord", movie);
+                        localStorage.setItem("searchedMovies", JSON.stringify(searchMovies));
+                        localStorage.setItem("checkboxStatus", JSON.stringify(checked));
+                        setFoundMovies(searchMovies);
+                    }
+                })
+                .catch((err) => {
+                    console.log(`Ошибка ${err}`);
+                })
+                .finally(() => setIsPreloader(false));
+        }
+    }
+
+    // Поиск короткометражек, управление чекбоксом "Короткометражки"
+    function handleCheckboxMovies(checkbox) {
+        let shortMovies;
+
+        let movies = JSON.parse(localStorage.getItem("searchedMovies"));
+
+        if (checkbox) {
+            shortMovies = movies.filter((item) => item.duration <= 40);
+        } else if (!checkbox) {
+            shortMovies = movies;
+        }
+        setFoundMovies(shortMovies);
+        // Сохраняем состояние переключателя короткометражек в хранилище.
+        localStorage.setItem("checkboxStatus", JSON.stringify(checkbox));
+    }
+
+    // Сохранение фильма
+    function handleSaveMovie(movie) {
+        mainApi.createMovie(movie)
+            .then((res) => {
+                setSavedMovies(savedMovies.concat(res));
+                setSavedMoviesList(savedMoviesList.concat(res));
+            })
+            .catch((err) => {
+                console.log(`Ошибка ${err}`);
+            });
+    }
+
+    // Удаление фильма
+    function handleDeleteMovie(movie) {
+        mainApi.deleteMovie(movie._id)
+            .then(() => {
+                const updatedMoviesList = savedMovies.filter((item) => item._id !== movie._id);
+                setSavedMovies(updatedMoviesList);
+                setSavedMoviesList(savedMoviesList.filter((item) => item._id !== movie._id));
+            })
+            .catch((err) => {
+                console.log(`Ошибка ${err}`);
+            });
+    }
+
+    // Загрузка сохраненных фильмов
+    function getSavedMovies() {
+        mainApi.getSavedMovies()
+            .then((res) => {
+                const savedMovies = res.filter((movie) => movie.owner === currentUser._id);
+                setSavedMovies(savedMovies);
+                setSavedMoviesList(savedMovies);
+            })
+            .catch((err) => {
+                console.log(`Ошибка ${err}`);
+            });
+    }
+
+    // Поиск по сохраненным фильмам
+    function handleSearchSavedMovie(req, checkbox) {
+        setIsPreloader(true);
+        const searchMovies = savedMovies.filter((item) =>
+            item.nameRU.toLowerCase().includes(req.toLowerCase()));
+
+        if (searchMovies.length === 0) {
+            setInfoTooltipImage(imageError);
+            setMessage('По вашему запросу ничего не найдено');
+            setInfoTooltipOpen(true);
+            setIsPreloader(false);
+        } else {
+            // При поиске состояние переключателя короткометражек сохраняется в хранилище.
+            localStorage.setItem("checkboxStatus", JSON.stringify(checkbox));
+            setSavedMovies(searchMovies);
+            setIsPreloader(false);
+        }
+    }
+
+    // Поиск короткометражек в сохраненных фильмах, управление чекбоксом "Короткометражки"
+    function handleCheckboxSavedMovies(checkbox) {
+        if (checkbox) {
+            setSavedMovies(savedMovies.filter((item) => item.duration <= 40));
+        } else if (!checkbox) {
+            setSavedMovies(savedMoviesList);
+        }
+        // Сохраняем состояние переключателя короткометражек в хранилище.
+        localStorage.setItem("checkboxStatusSavedMovies", JSON.stringify(checkbox));
+    }
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
                 <Route exact path={headerEndpoints}>
-                    <Header />
+                    <Header
+                        loggedIn={loggedIn}
+                    />
                 </Route>
 
                 <Switch>
@@ -186,11 +351,24 @@ function App() {
                     <ProtectedRoute
                         exact path="/movies"
                         component={Movies}
+                        onSearch={handleSearchMovies}
+                        foundMovies={foundMovies}
+                        onSaveMovie={handleSaveMovie}
+                        onDeleteMovie={handleDeleteMovie}
+                        savedMovies={savedMovies}
+                        onSubmitCheckbox={handleCheckboxMovies}
+                        preloaderStatus={isPreloader}
                     />
 
                     <ProtectedRoute
                         exact path="/saved-movies"
                         component={SavedMovies}
+                        onSearch={handleSearchSavedMovie}
+                        onSaveMovie={handleSaveMovie}
+                        onDeleteMovie={handleDeleteMovie}
+                        savedMovies={savedMovies}
+                        onSubmitCheckbox={handleCheckboxSavedMovies}
+                        preloaderStatus={isPreloader}
                     />
 
                     <Route path="*">

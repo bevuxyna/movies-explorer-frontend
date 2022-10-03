@@ -12,7 +12,7 @@ function SearchForm ({onSearch, onSubmitCheckbox}) {
     // Берем из хранилища название фильма и состояние чекбокса
     useEffect(() => {
         if (location.pathname === "/movies") {
-            setInputValue(localStorage.getItem("movieName"));
+            setInputValue(localStorage.getItem("searchWord"));
             setIsChecked(JSON.parse(localStorage.getItem("checkboxStatus")));
         } else if (location.pathname === "/saved-movies") {
             const checkboxStatus = JSON.parse(localStorage.getItem("checkboxStatusSavedMovies"));
