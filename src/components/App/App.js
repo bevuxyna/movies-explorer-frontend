@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Route, Switch, useHistory} from "react-router-dom";
+import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Main from "../Main/Main";
@@ -18,6 +18,7 @@ import * as auth from '../../utils/auth.js';
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 import imageError from '../../images/image_error.svg';
 import imageSuccess from '../../images/image_success.svg';
+import {SHORT_MOVIE_DURATION} from "../../utils/constants";
 
 function App() {
     const history = useHistory();
@@ -238,7 +239,7 @@ function App() {
         let movies = JSON.parse(localStorage.getItem("searchedMovies"));
 
         if (checkbox) {
-            shortMovies = movies.filter((item) => item.duration <= 40);
+            shortMovies = movies.filter((item) => item.duration <= SHORT_MOVIE_DURATION);
         } else if (!checkbox) {
             shortMovies = movies;
         }
@@ -307,7 +308,7 @@ function App() {
     // Поиск короткометражек в сохраненных фильмах, управление чекбоксом "Короткометражки"
     function handleCheckboxSavedMovies(checkbox) {
         if (checkbox) {
-            setSavedMovies(savedMovies.filter((item) => item.duration <= 40));
+            setSavedMovies(savedMovies.filter((item) => item.duration <= SHORT_MOVIE_DURATION));
         } else if (!checkbox) {
             setSavedMovies(savedMoviesList);
         }
@@ -330,14 +331,24 @@ function App() {
                     </Route>
 
                     <Route exact path="/sign-up">
-                        <Register
-                            onRegister={handleRegister}
-                            isLoading={isLoading}
-                        />
+                        {loggedIn
+                            ? <Redirect to="/" />
+                            : (
+                                <Register
+                                    onRegister={handleRegister}
+                                    isLoading={isLoading}
+                                />
+                            )
+                        }
                     </Route>
 
                     <Route exact path="/sign-in">
-                        <Login onLogin={handleLogin} />
+                        {loggedIn
+                            ? <Redirect to="/" />
+                            : (
+                                <Login onLogin={handleLogin} />
+                            )
+                        }
                     </Route>
 
                     <ProtectedRoute
