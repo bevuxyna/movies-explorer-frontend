@@ -1,20 +1,34 @@
 import {Route, useLocation} from "react-router-dom";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import {useEffect, useState} from "react";
-import { DEVICE_WIDTH_1280, DEVICE_WIDTH_1100, DEVICE_WIDTH_768, DEVICE_WIDTH_480, MAX_CARDS} from "../../../utils/constants";
+import {
+    DEVICE_WIDTH_1280,
+    MAX_CARDS,
+    DEVICE_WIDTH_320,
+    DEVICE_WIDTH_625,
+    DEVICE_WIDTH_1101,
+    ADD_CARDS_1280,
+    ADD_CARDS_768,
+    ADD_CARDS_320,
+    ADD_CARDS_DEFAULT,
+    SEARCH_CARDS_DEFAULT,
+    SEARCH_CARDS_1101,
+    SEARCH_CARDS_625, SEARCH_CARDS_320
+} from "../../../utils/constants";
+
 
 function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) {
     const location = useLocation();
 
     //max количество карточек в блоке при первом поиске
-    const [maxCards, setMaxCards] = useState(12);
+    const [maxCards, setMaxCards] = useState(SEARCH_CARDS_DEFAULT);
 
     //Блок результатов появляется только после обработки запроса.
     // Если пользователь ещё ничего не искал, блока с карточками на странице нет.
     const [renderedMovies, setRenderedMovies] = useState([]);
 
     // Ширина экрана устройства
-    const [deviceWidth, setDeviceWidth] = useState(1280);
+    const [deviceWidth, setDeviceWidth] = useState(DEVICE_WIDTH_1280);
 
     useEffect(() => {
         setMovies();
@@ -29,7 +43,7 @@ function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) 
     useEffect(() => {
         onSubscribeResize();
         return () => offSubscribeResize();
-    }, []);
+    }, [deviceWidth]);
 
     // Количество найденных фильмов в блоке результата
     function setFoundMovies(count) {
@@ -45,15 +59,19 @@ function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) 
 
     // Количество карточек, которые отображаются на странице, зависит от ширины экрана устройства
     function checkDeviceWidth() {
-        if (deviceWidth < DEVICE_WIDTH_768) {
-            setFoundMovies(5);
-        } else if (deviceWidth < DEVICE_WIDTH_1100) {
-            setFoundMovies(6);
-        } else if (deviceWidth < DEVICE_WIDTH_1280) {
-            setFoundMovies(9);
-        } else {
-            setFoundMovies(12);
+        if (deviceWidth >= DEVICE_WIDTH_1101) {
+            //Ширина 1280px — 12 карточек по 3 в ряд
+            setFoundMovies(SEARCH_CARDS_1101);
+
+        } else if (deviceWidth >= DEVICE_WIDTH_625) {
+            //Ширина 768px — 8 карточек по 2 в ряд
+            setFoundMovies(SEARCH_CARDS_625);
+
+        } else if (deviceWidth >= DEVICE_WIDTH_320) {
+            //Ширина от 320px до 480px — 5 карточек по 1 в ряд
+            setFoundMovies(SEARCH_CARDS_320);
         }
+
         if (location.pathname === "/saved-movies") {
             setMaxCards(MAX_CARDS);
         }
@@ -64,21 +82,11 @@ function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) 
     }
 
     function onSubscribeResize() {
-        // Пользователь может изменять ширину экрана своего устройства.
-        // Например, переводя телефон из портретной ориентации в альбомную, и наоборот.
-        // Это событие можно отслеживать с помощью слушателя "resize".
-        // Чтобы колбэк-функция слушателя не срабатывала слишком часто,
-        // например, при изменении ширины экрана в отладчике, устанавливаем setTimeout
-        // на вызов этой функции внутри слушателя "resize".
-        window.addEventListener("resize", function () {
-            setTimeout(handleSubscribeResize, 3000);
-        });
+        window.addEventListener("resize", handleSubscribeResize);
     }
 
     function offSubscribeResize() {
-        window.removeEventListener("resize", function () {
-            setTimeout(handleSubscribeResize, 3000);
-        });
+        window.removeEventListener("resize", handleSubscribeResize);
     }
 
     function setMovies() {
@@ -92,20 +100,22 @@ function MoviesCardList({foundMovies, onSaveMovie, onDeleteMovie, savedMovies}) 
     }
 
     function handleAddButtonClick() {
-        if (deviceWidth < DEVICE_WIDTH_1280) {
+        if (deviceWidth >= DEVICE_WIDTH_1101) {
             //Ширина 1280px — 12 карточек по 3 в ряд. Кнопка «Ещё» загружает по 3 карточки.
-            setMaxCards(maxCards + 3);
-        } else if (deviceWidth < DEVICE_WIDTH_1100) {
+            setMaxCards(maxCards + ADD_CARDS_1280);
+
+        } else if (deviceWidth >= DEVICE_WIDTH_625) {
             //Ширина 768px — 8 карточек по 2 в ряд. Кнопка «Ещё» загружает по 2 карточки
-            setMaxCards(maxCards + 2);
-        } else if (deviceWidth < DEVICE_WIDTH_480) {
+            setMaxCards(maxCards + ADD_CARDS_768);
+
+        } else if (deviceWidth >= DEVICE_WIDTH_320) {
             //Ширина от 320px до 480px — 5 карточек по 1 в ряд. Кнопка «Ещё» загружает по 2 карточки.
-            setMaxCards(maxCards + 2);
+            setMaxCards(maxCards + ADD_CARDS_320);
+
         } else {
-            setMaxCards(maxCards + 3);
+            setMaxCards(maxCards + ADD_CARDS_DEFAULT);
         }
     }
-
 
     return (
         <div className="movies-card-list">
