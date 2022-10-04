@@ -6,6 +6,10 @@ import searchIcon from '../../../images/search_icon.svg';
 function SearchForm ({onSearch, onSubmitCheckbox}) {
     const [inputValue, setInputValue] = useState("");
     const [isChecked, setIsChecked] = useState(false);
+    const [searchError, setSearchError] = useState({
+        errorMessage: "",
+        isValid: true
+    });
 
     const location = useLocation();
 
@@ -17,16 +21,41 @@ function SearchForm ({onSearch, onSubmitCheckbox}) {
         } else if (location.pathname === "/saved-movies") {
             const checkboxStatus = JSON.parse(localStorage.getItem("checkboxStatusSavedMovies"));
             setIsChecked(checkboxStatus);
+            console.log(checkboxStatus)
             onSubmitCheckbox(checkboxStatus);
         }
     }, [location]);
 
+    useEffect(() => {
+        searchError.isValid && setSearchError({errorMessage: "", isValid: true});
+    }, []);
+
     function handleInputChange(evt) {
         setInputValue(evt.target.value);
+
+        if (evt.target.value.length === 0) {
+            setSearchError({
+                isValid: evt.target.validity.valid,
+                errorMessage: "Нужно ввести ключевое слово"
+            });
+        } else {
+            setSearchError({
+                isValid: evt.target.validity.valid,
+                errorMessage: ""
+            });
+        }
     }
 
     function handleSubmitSearch(evt) {
         evt.preventDefault();
+
+        if (!inputValue) {
+            return setSearchError({
+                isValid: false,
+                errorMessage: "Нужно ввести ключевое слово"
+            });
+        }
+
         onSearch(inputValue, isChecked);
     }
 
@@ -35,6 +64,7 @@ function SearchForm ({onSearch, onSubmitCheckbox}) {
             <form
                 className="search-form__container"
                 onSubmit={handleSubmitSearch}
+                noValidate
             >
                 <img
                     className="search-form__container_icon"
@@ -55,6 +85,8 @@ function SearchForm ({onSearch, onSubmitCheckbox}) {
                     type="submit"
                 />
             </form>
+
+            <span className="search-form__error">{searchError.errorMessage}</span>
 
             <FilterCheckbox
                 onSubmitCheckbox={onSubmitCheckbox}
