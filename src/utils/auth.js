@@ -17,14 +17,14 @@ export const register = ({name, password, email}) => {
     })
         .then(checkServerResponse);
 };
-export const authorize = ({name, password, email}) => {
+export const authorize = ({password, email}) => {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name, password, email})
+        body: JSON.stringify({password, email})
     })
         .then(checkServerResponse);
 };

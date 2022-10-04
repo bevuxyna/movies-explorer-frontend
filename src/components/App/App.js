@@ -89,16 +89,16 @@ function App() {
     }
 
     // Регистрация пользователя
-    function handleRegister(registerData) {
+    function handleRegister({name, password, email}) {
         setIsLoading(true);
-        auth.register(registerData)
+        auth.register({name, password, email})
             .then(() => {
                 //Попап успешной регистрации
-                setInfoTooltipImage(imageSuccess);
-                setMessage('Вы успешно зарегистрировались!');
-                setInfoTooltipOpen(true);
+                // setInfoTooltipImage(imageSuccess);
+                // setMessage('Вы успешно зарегистрировались!');
+                // setInfoTooltipOpen(true);
 
-                //Переадресация пользователя на страницу /movies
+                handleLogin({password, email});
                 history.push('/movies');
             })
             .catch((err) => {
@@ -112,8 +112,8 @@ function App() {
     }
 
     // Авторизация пользователя
-    function handleLogin(loginData) {
-        auth.authorize(loginData)
+    function handleLogin({password, email}) {
+        auth.authorize({password, email})
             .then((res) => {
                 if (res.token) {
                     setLoggedIn(true);
