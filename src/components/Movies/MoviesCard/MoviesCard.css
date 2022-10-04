@@ -111,14 +111,6 @@
     }
 
     .movies-card__button {
-        position: absolute;
-        top: 14px;
-        right: 14px;
-        opacity: 0;
-        transition: opacity .35s ease-in-out;
-    }
-
-    .movies-card:hover .movies-card__button {
         opacity: 1;
     }
 
@@ -136,15 +128,6 @@
 
     .movies-card__button-save:hover {
         cursor: pointer;
-    }
-
-    /*.movies-card__button-save-active {*/
-    /*    background-color: #EE3465;*/
-    /*    border-radius: 30px;*/
-    /*}*/
-
-    .movies-card__button-delete {
-
     }
 
     .movies-card__container-duration {
