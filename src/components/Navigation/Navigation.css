@@ -12,20 +12,16 @@
 }
 
 .navigation__movies-link {
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 18px;
-    color: #000000;
-    text-decoration: none;
-}
-
-.navigation__saved-movies-link {
     font-weight: 400;
     font-size: 13px;
     line-height: 18px;
     color: #000000;
     text-decoration: none;
-    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.navigation__movies-link_active {
+    font-weight: 500;
 }
 
 .navigation__account {
