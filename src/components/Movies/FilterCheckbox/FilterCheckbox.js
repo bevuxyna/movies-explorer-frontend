@@ -1,13 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-function FilterCheckbox ({onSubmitCheckbox}) {
-    const [isChecked, setIsChecked] = useState(false);
-
-    function handleChangeCheckbox() {
-        setIsChecked(!isChecked);
-        onSubmitCheckbox(!isChecked);
-    }
-
+function FilterCheckbox ({isChecked, onSubmitCheckbox}) {
     return (
             <label className="filter-checkbox">
                 <div className="filter-checkbox__container">
@@ -15,7 +8,7 @@ function FilterCheckbox ({onSubmitCheckbox}) {
                         className="filter-checkbox__input"
                         type="checkbox"
                         checked={isChecked}
-                        onChange={handleChangeCheckbox}
+                        onChange={onSubmitCheckbox}
                     />
                     <span className="filter-checkbox__tumbler" />
                 </div>

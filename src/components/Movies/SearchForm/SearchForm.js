@@ -21,7 +21,6 @@ function SearchForm ({onSearch, onSubmitCheckbox}) {
         } else if (location.pathname === "/saved-movies") {
             const checkboxStatus = JSON.parse(localStorage.getItem("checkboxStatusSavedMovies"));
             setIsChecked(checkboxStatus);
-            console.log(checkboxStatus)
             onSubmitCheckbox(checkboxStatus);
         }
     }, [location]);
@@ -59,6 +58,11 @@ function SearchForm ({onSearch, onSubmitCheckbox}) {
         onSearch(inputValue, isChecked);
     }
 
+    function handleChangeCheckbox() {
+        setIsChecked(!isChecked);
+        onSubmitCheckbox(!isChecked);
+    }
+
     return (
         <div className="search-form">
             <form
@@ -89,7 +93,8 @@ function SearchForm ({onSearch, onSubmitCheckbox}) {
             <span className="search-form__error">{searchError.errorMessage}</span>
 
             <FilterCheckbox
-                onSubmitCheckbox={onSubmitCheckbox}
+                isChecked={isChecked}
+                onSubmitCheckbox={handleChangeCheckbox}
             />
         </div>
     )
