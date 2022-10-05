@@ -18,7 +18,7 @@ import * as auth from '../../utils/auth.js';
 import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 import imageError from '../../images/image_error.svg';
 import imageSuccess from '../../images/image_success.svg';
-import {SHORT_MOVIE_DURATION} from "../../utils/constants";
+import {SHORT_MOVIE_DURATION, URL_REGEX} from "../../utils/constants";
 
 function App() {
     const history = useHistory();
@@ -219,6 +219,13 @@ function App() {
             // Запрос всех фильмов с сервиса beatfilm-movies производится только при первом поиске
             moviesApi.getInitialMovies()
                 .then((requestMovies) => {
+                    requestMovies = requestMovies.map((item) => {
+                        if(!URL_REGEX.test(item.trailerLink)) {
+                            item.trailerLink = 'https://www.youtube.com';
+                        }
+                        return item;
+                    });
+
                     const searchMovies = requestMovies.filter((item) =>
                         // Поиск фильмов регистронезависимый
                         item.nameRU.toLowerCase().includes(movie.toLowerCase()));
@@ -267,6 +274,7 @@ function App() {
             .then((res) => {
                 setSavedMovies(savedMovies.concat(res));
                 setSavedMoviesList(savedMoviesList.concat(res));
+                console.log(movie.trailerLink)
             })
             .catch((err) => {
                 console.log(`Ошибка ${err}`);

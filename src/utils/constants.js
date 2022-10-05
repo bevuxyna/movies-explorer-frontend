@@ -28,6 +28,8 @@ export const SEARCH_CARDS_DEFAULT = 12;
 // Длительность короткометражек
 export const SHORT_MOVIE_DURATION = 40;
 
+export const URL_REGEX = /^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*/;
+
 export function handleMovieDuration(duration, movie) {
     if (duration === 60) {
         return `1 ч`;
