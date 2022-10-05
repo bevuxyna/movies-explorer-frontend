@@ -55,9 +55,9 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (JSON.parse(localStorage.getItem("searchedMovies"))) {
-            if (localStorage.getItem("searchedMovies")) {
-                setAllMovies(JSON.parse(localStorage.getItem("searchedMovies")));
+        if (JSON.parse(localStorage.getItem("loadedMovies"))) {
+            if (localStorage.getItem("loadedMovies")) {
+                setAllMovies(JSON.parse(localStorage.getItem("loadedMovies")));
             }
         }
     }, [])
