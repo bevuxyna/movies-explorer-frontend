@@ -49,6 +49,12 @@ function App() {
     }, []);
 
     useEffect(() => {
+        if (!localStorage.getItem("jwt")) {
+            handleSignOut();
+        }
+    }, []);
+
+    useEffect(() => {
         if (localStorage.getItem("searchedMovies") && localStorage.getItem("checkboxStatus")) {
             const checkboxStatus = JSON.parse(localStorage.getItem("checkboxStatus"));
             handleCheckboxMovies(checkboxStatus);
@@ -60,6 +66,10 @@ function App() {
             getSavedMovies();
         }
     }, [loggedIn, currentUser]);
+
+    useEffect(() => {
+        console.log(loadedMovies.length)
+    })
 
     //проверка наличия у пользователя токена
     function tokenCheck() {
@@ -81,9 +91,6 @@ function App() {
                         handleSignOut();
                     } else {
                         handleSignOut();
-                        setInfoTooltipImage(imageError);
-                        setMessage(`Ошибка ${err.statusText}`);
-                        setInfoTooltipOpen(true);
                     }
                 });
         }
@@ -145,6 +152,9 @@ function App() {
         localStorage.clear();
         setLoggedIn(false);
         setCurrentUser({ name: "", email: "", _id: "" });
+        setFoundMovies([]);
+        setLoadedMovies([]);
+        setSavedMovies([]);
         history.push("/");
     }
 
@@ -217,6 +227,8 @@ function App() {
                     } else {
                         // При поиске текст запроса, найденные фильмы и состояние переключателя короткометражек
                         // сохраняются в хранилище.
+                        console.log(loadedMovies.length)
+                        console.log('hhhh')
                         localStorage.setItem("loadedMovies", JSON.stringify(requestMovies));
                         setLoadedMovies(requestMovies);
                         localStorage.setItem("searchWord", movie);
