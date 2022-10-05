@@ -37,7 +37,7 @@ function App() {
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const [loadedMovies, setLoadedMovies] = useState([]); // загруженные фильмы при первом поиске
+    const [allMovies, setAllMovies] = useState([]); // загруженные фильмы при первом поиске
     const [foundMovies, setFoundMovies] = useState([]); // найденные фильмы
     const [savedMovies, setSavedMovies] = useState([]); // сохраненные фильмы
     const [savedMoviesList, setSavedMoviesList] = useState([]);
@@ -55,6 +55,14 @@ function App() {
     }, []);
 
     useEffect(() => {
+        if (JSON.parse(localStorage.getItem("searchedMovies"))) {
+            if (localStorage.getItem("searchedMovies")) {
+                setAllMovies(JSON.parse(localStorage.getItem("searchedMovies")));
+            }
+        }
+    }, [])
+
+    useEffect(() => {
         if (localStorage.getItem("searchedMovies") && localStorage.getItem("checkboxStatus")) {
             const checkboxStatus = JSON.parse(localStorage.getItem("checkboxStatus"));
             handleCheckboxMovies(checkboxStatus);
@@ -66,10 +74,6 @@ function App() {
             getSavedMovies();
         }
     }, [loggedIn, currentUser]);
-
-    useEffect(() => {
-        console.log(loadedMovies.length)
-    })
 
     //проверка наличия у пользователя токена
     function tokenCheck() {
@@ -153,7 +157,7 @@ function App() {
         setLoggedIn(false);
         setCurrentUser({ name: "", email: "", _id: "" });
         setFoundMovies([]);
-        setLoadedMovies([]);
+        setAllMovies([]);
         setSavedMovies([]);
         history.push("/");
     }
@@ -191,9 +195,8 @@ function App() {
 
     // Поиск фильмов
     function handleSearchMovies(movie, checked) {
-        // Если все фильмы с сервиса beatfilm-movies уже загружены
-        if (loadedMovies.length !== 0) {
-            const searchMovies = loadedMovies.filter((item) =>
+        if (allMovies.length !== 0) {
+            const searchMovies = allMovies.filter((item) =>
                 // Поиск фильмов регистронезависимый
                 item.nameRU.toLowerCase().includes(movie.toLowerCase()));
 
@@ -227,10 +230,8 @@ function App() {
                     } else {
                         // При поиске текст запроса, найденные фильмы и состояние переключателя короткометражек
                         // сохраняются в хранилище.
-                        console.log(loadedMovies.length)
-                        console.log('hhhh')
                         localStorage.setItem("loadedMovies", JSON.stringify(requestMovies));
-                        setLoadedMovies(requestMovies);
+                        setAllMovies(requestMovies);
                         localStorage.setItem("searchWord", movie);
                         localStorage.setItem("searchedMovies", JSON.stringify(searchMovies));
                         localStorage.setItem("checkboxStatus", JSON.stringify(checked));
