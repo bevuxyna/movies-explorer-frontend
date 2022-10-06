@@ -82,6 +82,12 @@
     text-decoration: none;
 }
 
+@media screen and (max-width: 625px) {
+    .burger-menu__account {
+        margin-top: 444px;
+    }
+}
+
 @media screen and (max-width: 320px) {
     .burger-menu__close-button {
         top: 13px;
@@ -93,14 +99,10 @@
     }
 
     .burger-menu__movies-link {
-        margin-bottom: 248px;
+        margin-bottom: 24px;
     }
 
     .burger-menu__movies-link:nth-last-of-type(2) {
         padding-bottom: 7px;
-    }
-
-    .burger-menu__account {
-        margin-top: 444px;
     }
 }
