@@ -132,6 +132,10 @@
         cursor: pointer;
     }
 
+    .movies-card__button-delete {
+        opacity: 1;
+    }
+
     .movies-card__container-duration {
         font-weight: 400;
         font-size: 11px;
