@@ -308,7 +308,7 @@ function App() {
     }
 
     // Поиск по сохраненным фильмам
-    function handleSearchSavedMovie(req, checkbox) {
+    function handleSearchSavedMovie(req) {
         setIsPreloader(true);
         const searchMovies = savedMovies.filter((item) =>
             item.nameRU.toLowerCase().includes(req.toLowerCase()));
@@ -320,7 +320,6 @@ function App() {
             setIsPreloader(false);
         } else {
             // При поиске состояние переключателя короткометражек сохраняется в хранилище.
-            localStorage.setItem("checkboxStatus", JSON.stringify(checkbox));
             setSavedMovies(searchMovies);
             setIsPreloader(false);
         }
@@ -333,8 +332,6 @@ function App() {
         } else if (!checkbox) {
             setSavedMovies(savedMoviesList);
         }
-        // Сохраняем состояние переключателя короткометражек в хранилище.
-        localStorage.setItem("checkboxStatusSavedMovies", JSON.stringify(checkbox));
     }
 
     return (
