@@ -79,6 +79,11 @@
     border: none;
     width: 21px;
     height: 21px;
+    opacity: 0;
+}
+
+.movies-card:hover .movies-card__button-delete {
+    opacity: 1;
 }
 
 .movies-card__button-delete:hover {
