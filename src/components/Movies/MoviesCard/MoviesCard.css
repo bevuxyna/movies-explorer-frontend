@@ -34,11 +34,10 @@
     position: absolute;
     top: 14px;
     right: 14px;
-    opacity: 0;
     transition: opacity .35s ease-in-out;
 }
 
-.movies-card:hover .movies-card__button {
+.movies-card:hover .movies-card__button-save {
     opacity: 1;
 }
 
@@ -52,6 +51,7 @@
     border: none;
     width: 72px;
     height: 21px;
+    opacity: 0;
 }
 
 .movies-card__button-save:hover {
