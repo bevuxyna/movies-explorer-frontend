@@ -26,6 +26,11 @@
     line-height: 12px;
     color: #A0A0A0;
     margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.login__form-label:nth-of-type(1) {
+    margin-top: 0;
 }
 
 .login__form-input {
@@ -39,13 +44,25 @@
     border-radius: 8px;
     white-space: nowrap;
     overflow: hidden;
-    margin-bottom: 20px;
     padding: 15px;
     vertical-align: top;
 }
 
 .login__form-input:focus {
     outline: none;
+}
+
+.login__form-input_error {
+    color: #EE3465;
+}
+
+.login__form-error {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #EE3465;
+    margin-top: 10px;
+    max-width: 396px;
 }
 
 .login__form-button-submit {
@@ -67,6 +84,12 @@
 
 .login__form-button-submit:hover {
     opacity: 0.8;
+}
+
+.login__form-button-submit_disabled {
+    color: #C2C2C2;
+    background-color: #F8F8F8;
+    cursor: default;
 }
 
 .login__form-signup-block {

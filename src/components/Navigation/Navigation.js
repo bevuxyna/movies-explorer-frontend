@@ -1,18 +1,20 @@
-import {Link, NavLink} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 function Navigation() {
     return (
             <nav className="navigation">
                 <div className="navigation__movies">
-                    <Link
+                    <NavLink
                         className="navigation__movies-link"
+                        activeClassName="navigation__movies-link_active"
                         to="/movies"
                     >
                         Фильмы
-                    </Link>
+                    </NavLink>
 
                     <NavLink
-                        className="navigation__saved-movies-link"
+                        className="navigation__movies-link"
+                        activeClassName="navigation__movies-link_active"
                         to="/saved-movies"
                     >
                         Сохранённые фильмы
